@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isMusicPlaying = false;
     
     // 更新祝福语
-    greetingMessageElement.innerHTML = `💖 致 梦月 💖<br>520快乐，💗i love you💗！`;
+    greetingMessageElement.innerHTML = `💖 梦月 💖<br>520快乐，💗i love you💗！`;
     
     // 创建爱心形状
     createHeartShape();
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function createFloatingDecorations() {
         // 装饰元素类型
         const decorations = [
-            '🌟', '⭐', '✨', '🎈', '🎀', '🌸', '🌹', 
+            '🌟', '⭐', '✨', '🎈', '🌹', 
         ];
         
         // 创建25个随机装饰物
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 创建单个装饰物
     function createSingleDecoration() {
         const decorations = [
-            '🌟', '⭐', '✨', '🎈', '🎀', '🌸', '🌹', '🍀', '🎵', '🎶', '🦋', '🌈'
+            '🌟', '⭐', '✨', '🎈', 
         ];
         
         const decoration = document.createElement('div');
