@@ -11,25 +11,127 @@ document.addEventListener('DOMContentLoaded', () => {
     // 是否正在播放音乐
     let isMusicPlaying = false;
     
-    // 更新祝福语
-    greetingMessageElement.innerHTML = `💖 梦月 💖<br>520快乐，💗i love you💗！`;
+    // 初始隐藏所有主要内容
+    hideMainContent();
     
-    // 创建爱心形状
-    createHeartShape();
+    // 创建并显示开场引导弹窗
+    createIntroModal();
     
-    // 初始生成飘动文字和其他装饰物
-    for (let i = 0; i < 100; i++) { // 调整数量避免过多导致性能问题
-        createFloatingText();
+    // 隐藏主要内容函数
+    function hideMainContent() {
+        // 隐藏爱心容器
+        if (heartContainer) heartContainer.style.opacity = '0';
+        
+        // 隐藏祝福语
+        if (greetingMessageElement) greetingMessageElement.style.opacity = '0';
+        
+        // 隐藏音乐控制按钮
+        if (musicToggle) musicToggle.style.opacity = '0';
+        
+        // 隐藏添加文字按钮
+        if (addMoreTextBtn) addMoreTextBtn.style.opacity = '0';
     }
     
-    // 添加装饰性小爱心
-    createDecorationHearts();
+    // 创建开场引导弹窗
+    function createIntroModal() {
+        // 创建弹窗容器
+        const modal = document.createElement('div');
+        modal.className = 'intro-modal';
+        
+        // 创建弹窗内容
+        const modalContent = document.createElement('div');
+        modalContent.className = 'intro-modal-content';
+        
+        // 添加标题和文字
+        modalContent.innerHTML = `
+            <h2>💖 送给梦月的惊喜 💖</h2>
+            <p>点击下方按钮，开启爱的浪漫旅程...</p>
+            <button id="start-experience">开始浪漫之旅</button>
+        `;
+        
+        // 组装弹窗
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        
+        // 按钮点击事件
+        const startButton = document.getElementById('start-experience');
+        startButton.addEventListener('click', () => {
+            // 淡出弹窗
+            modal.classList.add('fade-out');
+            
+            // 移除弹窗并显示主内容
+            setTimeout(() => {
+                modal.remove();
+                showMainContent();
+                startBackgroundMusic();
+            }, 1000);
+        });
+    }
     
-    // 添加背景气球、星星等元素
-    createFloatingDecorations();
+    // 显示主内容并开始动画
+    function showMainContent() {
+        // 更新祝福语
+        greetingMessageElement.innerHTML = `💖 梦月 💖<br>520快乐，💗i love you💗！`;
+        
+        // 创建爱心形状
+        createHeartShape();
+        
+        // 初始生成飘动文字和其他装饰物
+        for (let i = 0; i < 100; i++) { // 调整数量避免过多导致性能问题
+            createFloatingText();
+        }
+        
+        // 添加装饰性小爱心
+        createDecorationHearts();
+        
+        // 添加背景气球、星星等元素
+        createFloatingDecorations();
+        
+        // 让中心爱心开始随机飘动
+        startRandomHeartMovement();
+        
+        // 渐显所有元素
+        setTimeout(() => {
+            if (heartContainer) {
+                heartContainer.style.opacity = '1';
+                heartContainer.style.transition = 'opacity 1.5s ease-in';
+            }
+            
+            if (greetingMessageElement) {
+                greetingMessageElement.style.opacity = '1';
+                greetingMessageElement.style.transition = 'opacity 1.5s ease-in';
+            }
+            
+            if (musicToggle) {
+                musicToggle.style.opacity = '1';
+                musicToggle.style.transition = 'opacity 1.5s ease-in';
+            }
+            
+            if (addMoreTextBtn) {
+                addMoreTextBtn.style.opacity = '1';
+                addMoreTextBtn.style.transition = 'opacity 1.5s ease-in';
+            }
+        }, 500);
+    }
     
-    // 让中心爱心开始随机飘动
-    startRandomHeartMovement();
+    // 开始播放背景音乐
+    function startBackgroundMusic() {
+        try {
+            backgroundMusic.play().then(() => {
+                isMusicPlaying = true;
+                musicToggle.textContent = '♫ 暂停音乐';
+                
+                // 隐藏音乐提示
+                const musicPrompt = document.getElementById('music-prompt');
+                if (musicPrompt) musicPrompt.style.opacity = '0';
+            }).catch(error => {
+                console.error('自动播放失败:', error);
+                // 不要隐藏提示，因为需要用户交互
+            });
+        } catch (error) {
+            console.error('播放音乐出错:', error);
+        }
+    }
     
     // 添加更多飘动文字的按钮
     addMoreTextBtn.addEventListener('click', () => {
@@ -360,8 +462,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const width = window.innerWidth;
         const heartScale = width < 768 ? (width / 768) * 0.8 : 1; // 移动端缩小
         
-        // 设置爱心容器大小
-        heartContainer.style.transform = `translate(-50%, -50%) scale(${heartScale})`;
+        // 设置爱心容器大小（但不要覆盖位置动画）
+        if (!heartContainer.style.transform || !heartContainer.style.transform.includes('translate')) {
+            heartContainer.style.transform = `translate(-50%, -50%) scale(${heartScale})`;
+        }
     }
     
     // 初始检测设备宽度
